@@ -5,15 +5,15 @@ The Ollama Application runs as a background server on your local machine using a
 
 ![Ollama Basic Architecture](../img/ollama_architecture.png)
 
-Note that the server portion of the architecture contains two components, and underlying, C++ application and a dedicated HTTP server that serves as an API to the Ollama application itself.  
+Note that the server portion of the architecture contains two components: an underlying C++ application, and a dedicated HTTP server that serves as an API to the Ollama application itself.  
 
-When the Ollama application is launched on your computer, the C++ application initializes and stands ready to receive commands and input. But the Ollama HTTP Server will not automatically start. The only sign that you, as a user, will be given that it is running is a small llama icon in your task bar.  
+When the Ollama application is launched on your computer, the C++ application initializes and stands ready to receive commands and input. But, the Ollama HTTP Server will not automatically start. The only sign that you, as a user, will be given that it is running is a small llama icon in your task bar.  
 
 Before you can actually use Ollama, you must configure the Ollama C++ application and use it to launch the Ollama HTTP Server to allow you to interact with your chosen model.  This is accomplished via your system's Command Line Interface (CLI):
 
-* Linux:  Launch your chosen shell;
-* Mac:  Launch Applications->Utilities->Terminal application
-* Windows: Launch the Windows "Command Prompt" application by clicking on the Windows Explorer icon, searching for "CMD", and opening the "Command Prompt" application.
+* Linux:  Launch your chosen shell
+* Mac:  Launch Applications -> Utilities -> Terminal application
+* Windows: Launch the Windows "Command Prompt" application by clicking on the Windows Explorer icon, searching for "CMD", and opening the "Command Prompt" application. *(Note: if you are on Windows and have taken DataLab's Command Line workshop you should have Git Bash installed, and you can use that instead of the Windows Command Prompt as your CLI if you wish.)*
 
 Depending on your operating system, once you have launched your CLI you will see something like this:
 
@@ -67,19 +67,19 @@ Ollama allows you to work with a collection of publicly available LLMs.  A compl
 pull <model-name>
 ```
 
-For this workshop, we will be working with the latest version of the Lamma model, *llama3.2*.  To pull this model to your local computer, execute the following command in your CLI:
+For this workshop, we will be working with the latest version of the Llama model, *llama3.2*.  To pull this model to your local computer, execute the following command in your CLI:
 
 ```
 pull llama3.2
 ```
 
-Once the Ollama application has completed downloading and verified the local version of the model, you will be ready to start the Ollama http server and begin interacting with the llama model.
+Once the Ollama application has completed downloading and verified the local version of the model, you will be ready to start the Ollama Http Server and begin interacting with the llama model.
 
 
 Starting the Ollama HTTP Server
 -------------------------------
 
-Once you have a model (or models) loaded, you are ready to start the Ollama HTTP server.  This is performed via the CLI using the run flag.  The generic form of the command is:
+Once you have a model (or models) loaded, you are ready to start the Ollama HTTP Server.  This is performed via the CLI using the run flag.  The generic form of the command is:
 
 ```
 ollama run <name-of-model>
