@@ -17,7 +17,7 @@ The below output shows the vector space for a single word from the Ollama model:
 
 Given the relativistic nature of word vectors, if mapped to a Cartesian plane of *n* dimensions, the vectors of words that share similar meanings will be closer to each other than the vectors of words that are semantically dissimilar.
 
-![Vector Space Concept](img/vector_space.png)
+![Vector Space Concept](../img/vector_space.png)
 
 Given this mathematical reality, we can calculate how similar any two words are by calculating the cosign similarity of two word vectors.  The more similar the two vectors are, the more semantically similar the two words are.
 

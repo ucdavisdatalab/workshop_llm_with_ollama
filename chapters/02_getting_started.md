@@ -3,7 +3,7 @@ Ollama Architecture
 
 The Ollama Application runs as a background server on your local machine using a classic client server architecture.
 
-![Ollama Basic Architecture](img/ollama_architecture.png)
+![Ollama Basic Architecture](../img/ollama_architecture.png)
 
 Note that the server portion of the architecture contains two components, and underlying, C++ application and a dedicated HTTP server that serves as an API to the Ollama application itself.  
 
@@ -17,7 +17,7 @@ Before you can actually use Ollama, you must configure the Ollama C++ applicatio
 
 Depending on your operating system, once you have launched your CLI you will see something like this:
 
-![The Bash Terminal](img/terminal.png)
+![The Bash Terminal](../img/terminal.png)
 
 Ollama does not include Unix-style "man" documentation, but the CLI application does include a simple help system.  To access help, enter the following at your command prompt:
 

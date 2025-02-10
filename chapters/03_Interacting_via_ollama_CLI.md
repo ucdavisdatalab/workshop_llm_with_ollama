@@ -9,7 +9,7 @@ ollama run llama3.2
 
 This provides you with a prompt interface similar to those available via cloud-based LLMs:
 
-![The Ollamma Command Line Interfce](img/ollama_cli.png)
+![The Ollamma Command Line Interfce](../img/ollama_cli.png)
 
 
 Getting Help During an Active Session
