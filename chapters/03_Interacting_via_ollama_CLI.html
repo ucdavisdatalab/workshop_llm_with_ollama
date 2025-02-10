@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en-us" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. The Ollama Command Line Interface &#8212; Working with Large Language Modles (LLMs) on Your Laptop</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=dddfd265"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapters/03_Interacting_via_ollama_CLI';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. The Ollama Python Library" href="04_Interacting_via_python.html" />
+    <link rel="prev" title="2. Ollama Architecture" href="02_getting_started.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en-us"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/datalab-logo-full-color-rgb-1.png" class="logo__image only-light" alt="Working with Large Language Modles (LLMs) on Your Laptop - Home"/>
+    <script>document.write(`<img src="../_static/datalab-logo-full-color-rgb-1.png" class="logo__image only-dark" alt="Working with Large Language Modles (LLMs) on Your Laptop - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_logistics.html">1. Why Ollama?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_getting_started.html">2. Ollama Architecture</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. The Ollama Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Interacting_via_python.html">4. The Ollama Python Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_Interacting_directly_with_the_model.html">5. Interacting Directly with the Model</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ucdavisdatalab/workshop_llm_with_ollama" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ucdavisdatalab/workshop_llm_with_ollama/issues/new?title=Issue%20on%20page%20%2Fchapters/03_Interacting_via_ollama_CLI.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapters/03_Interacting_via_ollama_CLI.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Ollama Command Line Interface</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help-during-an-active-session">3.1. Getting Help During an Active Session</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tuning-a-custom-model">3.2. Tuning a Custom Model</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-ollama-command-line-interface">
+<h1><span class="section-number">3. </span>The Ollama Command Line Interface<a class="headerlink" href="#the-ollama-command-line-interface" title="Link to this heading">#</a></h1>
+<p>When you start an Ollama service using the <em>ollama run <model-name></em> command, a CLI-based Ollama client will begin running in your CLI window.  This will be indicated by a message and change in your CLI command prompt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ollama</span> <span class="n">run</span> <span class="n">llama3</span><span class="mf">.2</span>
+</pre></div>
+</div>
+<p>This provides you with a prompt interface similar to those available via cloud-based LLMs:</p>
+<p><img alt="The Ollamma Command Line Interfce" src="../_images/ollama_cli.png" /></p>
+<section id="getting-help-during-an-active-session">
+<h2><span class="section-number">3.1. </span>Getting Help During an Active Session<a class="headerlink" href="#getting-help-during-an-active-session" title="Link to this heading">#</a></h2>
+<p>Beginning a prompt with the “/” special character tell the system that you wish to interact directly with the Ollama application, as opposed to the active model.  This is helpful for getting help “/?” as well as ending your session “/bye”</p>
+</section>
+<section id="tuning-a-custom-model">
+<h2><span class="section-number">3.2. </span>Tuning a Custom Model<a class="headerlink" href="#tuning-a-custom-model" title="Link to this heading">#</a></h2>
+<p>You can create a custom, fine-tuned model, by pre-defining parameters that affect the generative results output by the model.  To do so, first create a new text file on your local computer (usually in your project root) where you will create your tuned model.  We’ll create a model that is tuned to answer in the voice of Dr. Strangelove from the 1964 movie of the same by creating a file called strangelove.text with the following content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">llama3</span><span class="mf">.2</span>
+
+<span class="c1"># set the temperature 1-x [higher is more creative. lover is more coherent]</span>
+<span class="n">PARAMETER</span> <span class="n">temperature</span> <span class="mi">1</span>
+
+<span class="c1"># set the system prompt</span>
+<span class="n">SYSTEM</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">You are Dr. Strangelove.  Answer as The Doctor, only and give guidance about how </span>
+<span class="s2">questions relate to nuclear war</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The first line of our file designates the base model that we wish to tune.  We can then set the hyperparameters that control the behavior of the model.  A complete list of tuning parameters can be found in the <a class="reference external" href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md#parameter">Ollama ModelFile Documentation</a>.  Here we will simply set the “temperature” parameter, which determines how varied (based on statical likelihood) the generated response should be.</p>
+<p>Finally, we use the SYSTEM hyperparameter as a means of controlling the voice and content of generated responses.</p>
+<p>Once we’ve created and saved our modelfile, we can create our new, tuned model  using the generic command “ollama create <modelname> -f &lt;path_to_model_file&gt;” where “-f” is a flag indicated that the paraments should be loaded from the referenced file.  To create a model from our Strangelove.txt file, for example, we would run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ollama</span> <span class="n">create</span> <span class="n">strangelove</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">carlstahmer</span><span class="o">/</span><span class="n">strangelove</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>If you run the above command, designating an accurate file path for your system and file, you should see output similar to the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gathering</span> <span class="n">model</span> <span class="n">components</span> 
+<span class="n">using</span> <span class="n">existing</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="n">dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff</span> 
+<span class="n">using</span> <span class="n">existing</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">966</span><span class="n">de95ca8a62200913e3f8bfbf84c8494536f1b94b49166851e76644e966396</span> 
+<span class="n">using</span> <span class="n">existing</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="n">fcc5a6bec9daf9b561a68827b67ab6088e1dba9d1fa2a50d7bbcc8384e0a265d</span> 
+<span class="n">using</span> <span class="n">existing</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="n">a70ff7e570d97baaf4e62ac6e6ad9975e04caa6d900d3742d37698494479e0cd</span> 
+<span class="n">creating</span> <span class="n">new</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="n">fff0c529934626b169e40aacf4e432421880ceeae1fe72d4464388e14bbe70ad</span> 
+<span class="n">creating</span> <span class="n">new</span> <span class="n">layer</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">7</span><span class="n">fa4d1c192726882c2c46a2ffd5af3caddd99e96404e81b3cf2a41de36e25991</span> 
+<span class="n">writing</span> <span class="n">manifest</span> 
+<span class="n">success</span> 
+</pre></div>
+</div>
+<p>Once your model has been successfully created, your new model will appear in the list of models available to Ollama on your system</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="n">carlstahmer</span><span class="nd">@AdminisatorsMBP</span> <span class="o">~</span> <span class="o">%</span> <span class="n">ollama</span> <span class="nb">list</span>
+<span class="n">NAME</span>                        <span class="n">ID</span>              <span class="n">SIZE</span>      <span class="n">MODIFIED</span>      
+<span class="n">strangelove</span><span class="p">:</span><span class="n">latest</span>          <span class="n">acc2aed05bf9</span>    <span class="mf">2.0</span> <span class="n">GB</span>    <span class="mi">9</span> <span class="n">seconds</span> <span class="n">ago</span>    
+<span class="n">mxbai</span><span class="o">-</span><span class="n">embed</span><span class="o">-</span><span class="n">large</span><span class="p">:</span><span class="n">latest</span>    <span class="mi">468836162</span><span class="n">de7</span>    <span class="mi">669</span> <span class="n">MB</span>    <span class="mi">2</span> <span class="n">days</span> <span class="n">ago</span>       
+<span class="n">llama3</span><span class="mf">.2</span><span class="p">:</span><span class="n">latest</span>             <span class="n">a80c4f17acd5</span>    <span class="mf">2.0</span> <span class="n">GB</span>    <span class="mi">2</span> <span class="n">days</span> <span class="n">ago</span>   
+</pre></div>
+</div>
+<p>You can then run Ollama with your new model just as you would any other model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ollama</span> <span class="n">run</span> <span class="n">strangelove</span>
+</pre></div>
+</div>
+<p>Have fun playing with your new model!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapters"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_getting_started.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Ollama Architecture</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_Interacting_via_python.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>The Ollama Python Library</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help-during-an-active-session">3.1. Getting Help During an Active Session</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tuning-a-custom-model">3.2. Tuning a Custom Model</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Carl G. Stahmer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+  <img alt="CC BY-SA 4.0" src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg"> 
+</a>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
