@@ -14,38 +14,38 @@ This provides you with a prompt interface similar to those available via cloud-b
 
 Getting Help During an Active Session
 -------------------------------------
-Beginning a prompt with the "/" special character tell the system that you wish to interact directly with the Ollama application, as opposed to the active model.  This is helpful for getting help "/?" as well as ending your session "/bye"
+Beginning a prompt with the "/" special character tell the system that you wish to interact directly with the Ollama application, as opposed to the active model.  This is helpful for getting help ("/?") as well as ending your session ("/bye").
 
 
 Tuning a Custom Model
 ---------------------
 
-You can create a custom, fine-tuned model, by pre-defining parameters that affect the generative results output by the model.  To do so, first create a new text file on your local computer (usually in your project root) where you will create your tuned model.  We'll create a model that is tuned to answer in the voice of Dr. Strangelove from the 1964 movie of the same by creating a file called strangelove.text with the following content:
+You can create a custom, fine-tuned model by pre-defining parameters that affect the generative results output by the model.  To do so, first create a new text file on your local computer (usually in your project root) where you will create your tuned model.  We'll create a model that is tuned to answer in the voice of Dr. Strangelove from the 1964 movie of the same name by creating a file called strangelove.text with the following content:
 
 ```
 FROM llama3.2
 
-# set the temperature 1-x [higher is more creative. lover is more coherent]
+# set the temperature 1-x [higher is more creative, lower is more coherent]
 PARAMETER temperature 1
 
 # set the system prompt
 SYSTEM """
 You are Dr. Strangelove.  Answer as The Doctor, only and give guidance about how 
-questions relate to nuclear war
+questions relate to nuclear war.
 """
 ```
 
-The first line of our file designates the base model that we wish to tune.  We can then set the hyperparameters that control the behavior of the model.  A complete list of tuning parameters can be found in the [Ollama ModelFile Documentation](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#parameter).  Here we will simply set the "temperature" parameter, which determines how varied (based on statical likelihood) the generated response should be.  
+The first line of our file designates the base model that we wish to tune.  We can then set the hyperparameters that control the behavior of the model.  A complete list of tuning parameters can be found in the [Ollama ModelFile Documentation](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#parameter).  Here we will simply set the "temperature" parameter, which determines how varied (based on statistical likelihood) the generated response should be.  
 
 Finally, we use the SYSTEM hyperparameter as a means of controlling the voice and content of generated responses.  
 
-Once we've created and saved our modelfile, we can create our new, tuned model  using the generic command "ollama create <modelname> -f <path_to_model_file>" where "-f" is a flag indicated that the paraments should be loaded from the referenced file.  To create a model from our Strangelove.txt file, for example, we would run:
+Once we've created and saved our model file, we can create our new, tuned model  using the generic command "ollama create <modelname> -f <path_to_model_file>". Here, the "-f" is a flag indicating that the paraments should be loaded from the referenced file.  To create a model from our Strangelove.txt file, for example, I am running from my system:
 
 ```
 ollama create strangelove -f /Users/carlstahmer/strangelove.txt
 ```
 
-If you run the above command, designating an accurate file path for your system and file, you should see output similar to the following:
+If you run the above command, *designating an accurate file path for your system and file,* you should see output similar to the following:
 
 ```
 gathering model components 
@@ -59,7 +59,7 @@ writing manifest
 success 
 ```
 
-Once your model has been successfully created, your new model will appear in the list of models available to Ollama on your system
+Once your model has been successfully created, your new model will appear in the list of models available to Ollama on your system.
 
 ```
 (base) carlstahmer@AdminisatorsMBP ~ % ollama list
