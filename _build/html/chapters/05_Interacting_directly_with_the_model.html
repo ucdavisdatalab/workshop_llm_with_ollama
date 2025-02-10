@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en-us" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. Interacting Directly with the Model &#8212; Working with Large Language Modles (LLMs) on Your Laptop</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=dddfd265"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapters/05_Interacting_directly_with_the_model';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="4. The Ollama Python Library" href="04_Interacting_via_python.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en-us"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/datalab-logo-full-color-rgb-1.png" class="logo__image only-light" alt="Working with Large Language Modles (LLMs) on Your Laptop - Home"/>
+    <script>document.write(`<img src="../_static/datalab-logo-full-color-rgb-1.png" class="logo__image only-dark" alt="Working with Large Language Modles (LLMs) on Your Laptop - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_logistics.html">1. Why Ollama?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_getting_started.html">2. Ollama Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_Interacting_via_ollama_CLI.html">3. The Ollama Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Interacting_via_python.html">4. The Ollama Python Library</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Interacting Directly with the Model</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ucdavisdatalab/workshop_llm_with_ollama" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ucdavisdatalab/workshop_llm_with_ollama/issues/new?title=Issue%20on%20page%20%2Fchapters/05_Interacting_directly_with_the_model.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapters/05_Interacting_directly_with_the_model.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Interacting Directly with the Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-vector-space-concept">5.1. The Vector Space Concept</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">5.2. Environment Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-augmented-generation-rag">5.3. Retrieval-Augmented Generation (RAG)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together-the-complete-rag">5.4. Putting it all together - the complete RAG</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="interacting-directly-with-the-model">
+<h1><span class="section-number">5. </span>Interacting Directly with the Model<a class="headerlink" href="#interacting-directly-with-the-model" title="Link to this heading">#</a></h1>
+<p>So far, all of our interactions with the LLM have been executed via the generative prompting mechanism.  But a rich textual model lies behind the generative side of LLMs, and it is often beneficial, as well as interesting, to interact directly with the model itself, completely, or at least partially, bypassing the generative aspects of the LLM.  In this final chapter we’ll setup a simple Retrieval-Augmented Generation (RAG) workflow as a means of demonstrating how interacting directly with the LLM model can be used to solve common research problems.</p>
+<section id="the-vector-space-concept">
+<h2><span class="section-number">5.1. </span>The Vector Space Concept<a class="headerlink" href="#the-vector-space-concept" title="Link to this heading">#</a></h2>
+<p>LLMs are built primarily using a Transformer model design, which is an iteration of the word embedings models first introduced in 2013 by Mikolov, et al in <a class="reference external" href="https://arxiv.org/abs/1301.3781">Efficient Estimation of Word Representations in Vector Space</a>.</p>
+<p>Vector models represent the semantic space of every word in a known vocabulary as large vector of <em>n</em> calculated parameters, where the parametric values assigned to a given word contain weights that are related to the values of the same parameter for every other word.  The details of the various methods of calculating these weights is beyond the scope of this workshop.  (See the paper referenced in the above paragraph.). The important thing to know in this context is that if you introduce a new word or document into the model, the weights of every parameter for every work will change.  A non-mathematical way to say this is the parametric definition of each word in the model contains within it the knowledge of every other word in the model.</p>
+<p>The below output shows the vector space for a single word from the Ollama model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mf">0.017877653</span><span class="p">,</span> <span class="mf">0.06340178</span><span class="p">,</span> <span class="mf">0.002512074</span><span class="p">,</span> <span class="mf">0.02502087</span><span class="p">,</span> <span class="mf">0.014879474</span><span class="p">,</span> <span class="mf">0.033396315</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018965052</span><span class="p">,</span> <span class="mf">0.021701865</span><span class="p">,</span> <span class="mf">0.022903813</span><span class="p">,</span> <span class="mf">0.005726911</span><span class="p">,</span> <span class="mf">0.011753164</span><span class="p">,</span> <span class="mf">0.024635881</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.036029853</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0122078825</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.038973905</span><span class="p">,</span> <span class="mf">0.028633859</span><span class="p">,</span> <span class="mf">0.042755026</span><span class="p">,</span> <span class="mf">0.0041230093</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007491054</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.004649939</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04057417</span><span class="p">,</span> <span class="mf">0.06582168</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.040506583</span><span class="p">,</span> <span class="mf">0.047047015</span><span class="p">,</span> <span class="mf">0.07758565</span><span class="p">,</span> <span class="mf">0.04061356</span><span class="p">,</span> <span class="mf">0.08639454</span><span class="p">,</span> <span class="mf">0.008880966</span><span class="p">,</span> <span class="mf">0.058461666</span><span class="p">,</span> <span class="mf">0.020822758</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.002838804</span><span class="p">,</span> <span class="mf">0.029212574</span><span class="p">,</span> <span class="mf">0.09078681</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057084266</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.024549095</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016134499</span><span class="p">,</span> <span class="mf">0.012695589</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.002101303</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009117725</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08302931</span><span class="p">,</span> <span class="mf">0.030918889</span><span class="p">,</span> <span class="mf">0.004267565</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0040433845</span><span class="p">,</span> <span class="mf">0.003311327</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019085197</span><span class="p">,</span> <span class="mf">0.0013708055</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0049502417</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0026343798</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0055629555</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06046351</span><span class="p">,</span> <span class="mf">0.00037648194</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00054742245</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028439399</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00605915</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005068259</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.051835686</span><span class="p">,</span> <span class="mf">0.041476496</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.030044692</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009939256</span><span class="p">,</span> <span class="mf">0.0122636845</span><span class="p">,</span> <span class="mf">0.036116987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0011576054</span><span class="p">,</span> <span class="mf">0.017289555</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02137621</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009717823</span><span class="p">,</span> <span class="mf">0.018864619</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.041405194</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.031779822</span><span class="p">,</span> <span class="mf">0.016003272</span><span class="p">,</span> <span class="mf">0.02662322</span><span class="p">,</span> <span class="mf">0.042489186</span><span class="p">,</span> <span class="mf">0.05851829</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028756421</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008845935</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022120439</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.038079057</span><span class="p">,</span> <span class="mf">0.015947865</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010375119</span><span class="p">,</span> <span class="mf">0.007400938</span><span class="p">,</span> <span class="mf">0.040579136</span><span class="p">,</span> <span class="mf">0.042395342</span><span class="p">,</span> <span class="mf">0.02481092</span><span class="p">,</span> <span class="mf">0.0069094235</span><span class="p">,</span> <span class="mf">0.0445682</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03433794</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.006127028</span><span class="p">,</span> <span class="mf">0.006102693</span><span class="p">,</span> <span class="mf">0.04437743</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005359529</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009452275</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070931956</span><span class="p">,</span> <span class="mf">0.024026003</span><span class="p">,</span> <span class="mf">0.021285562</span><span class="p">,</span> <span class="mf">0.043804023</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0062165977</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0031585386</span><span class="p">,</span> <span class="mf">0.025973827</span><span class="p">,</span> <span class="mf">0.0022389963</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020393115</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.047750466</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016769083</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032374572</span><span class="p">,</span> <span class="mf">0.009353231</span><span class="p">,</span> <span class="mf">0.05064914</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05532496</span><span class="p">,</span> <span class="mf">0.0037234968</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03282322</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019148953</span><span class="p">,</span> <span class="mf">0.020609362</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.035215434</span><span class="p">,</span> <span class="mf">0.010370555</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01572176</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0131997755</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018954288</span><span class="p">,</span> <span class="mf">0.001769391</span><span class="p">,</span> <span class="mf">0.02663567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.052827142</span><span class="p">,</span> <span class="mf">0.042304583</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07665151</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0022814118</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01620359</span><span class="p">,</span> <span class="mf">0.004879272</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.004069177</span><span class="p">,</span> <span class="mf">0.029104479</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04665595</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.056296546</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058358468</span><span class="p">,</span> <span class="mf">0.06820146</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027006276</span><span class="p">,</span> <span class="mf">0.048776966</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0001133284</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.024395423</span><span class="p">,</span> <span class="mf">0.0070581045</span><span class="p">,</span> <span class="mf">0.006074796</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016159529</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.531893e-05</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00082628976</span><span class="p">,</span> <span class="mf">0.0637154</span><span class="p">,</span> <span class="mf">0.0059138928</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03198953</span><span class="p">,</span> <span class="mf">0.03083209</span><span class="p">,</span> <span class="mf">0.04447194</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010676811</span><span class="p">,</span> <span class="mf">0.059229825</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010191996</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0028025664</span><span class="p">,</span> <span class="mf">0.015581719</span><span class="p">,</span> <span class="mf">0.0017894701</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.036908768</span><span class="p">,</span> <span class="mf">0.032750253</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00061538146</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00023421139</span><span class="p">,</span> <span class="mf">0.023999905</span><span class="p">,</span> <span class="mf">0.05311479</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.002025976</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.035598464</span><span class="p">,</span> <span class="mf">0.05171491</span><span class="p">,</span> <span class="mf">0.016205553</span><span class="p">,</span> <span class="mf">0.012384458</span><span class="p">,</span> <span class="mf">0.015848337</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018880742</span><span class="p">,</span> <span class="mf">0.009939101</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04564323</span><span class="p">,</span> <span class="mf">0.04619895</span><span class="p">,</span> <span class="mf">0.016052114</span><span class="p">,</span> <span class="mf">0.029844409</span><span class="p">,</span> <span class="mf">0.016591715</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03304172</span><span class="p">,</span> <span class="mf">0.010738218</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034117375</span><span class="p">,</span> <span class="mf">0.00042674044</span><span class="p">,</span> <span class="mf">0.02169864</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029808298</span><span class="p">,</span> <span class="mf">0.047498785</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0035721618</span><span class="p">,</span> <span class="mf">0.0036177752</span><span class="p">,</span> <span class="mf">0.0024102454</span><span class="p">,</span> <span class="mf">0.015826527</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0043423865</span><span class="p">,</span> <span class="mf">0.00017197774</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013263845</span><span class="p">,</span> <span class="mf">0.0055757593</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.021086643</span><span class="p">,</span> <span class="mf">0.021501157</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008960701</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013033894</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.035891533</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0023478405</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0105842315</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029424394</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.040108405</span><span class="p">,</span> <span class="mf">0.047428276</span><span class="p">,</span> <span class="mf">0.032614276</span><span class="p">,</span> <span class="mf">0.004700818</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029580154</span><span class="p">,</span> <span class="mf">0.013410349</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04436798</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.002524112</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043401685</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019115387</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0310016</span><span class="p">,</span> <span class="mf">0.042518526</span><span class="p">,</span> <span class="mf">0.0011768227</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009699604</span><span class="p">,</span> <span class="mf">0.027930323</span><span class="p">,</span> <span class="mf">0.004868278</span><span class="p">,</span> <span class="mf">0.042531665</span><span class="p">,</span> <span class="mf">0.023388566</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.031542692</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022126734</span><span class="p">,</span> <span class="mf">0.02991803</span><span class="p">,</span> <span class="mf">0.020402728</span><span class="p">,</span> <span class="mf">0.01740285</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03146585</span><span class="p">,</span> <span class="mf">0.0006675659</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043296386</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.024070092</span><span class="p">,</span> <span class="mf">0.05440069</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.091592595</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015312188</span><span class="p">,</span> <span class="mf">0.021202749</span><span class="p">,</span> <span class="mf">0.04029528</span><span class="p">,</span> <span class="mf">0.033521898</span><span class="p">,</span> <span class="mf">0.0662376</span><span class="p">,</span> <span class="mf">0.041259386</span><span class="p">,</span> <span class="mf">0.0019152533</span><span class="p">,</span> <span class="mf">0.04165173</span><span class="p">,</span> <span class="mf">0.015476845</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027217526</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013091816</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023338709</span><span class="p">,</span> <span class="mf">0.046423323</span><span class="p">,</span> <span class="mf">0.021806458</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028718244</span><span class="p">,</span> <span class="mf">0.027715893</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008203636</span><span class="p">,</span> <span class="mf">0.034483273</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013777358</span><span class="p">,</span> <span class="mf">0.04319412</span><span class="p">,</span> <span class="mf">0.01159729</span><span class="p">,</span> <span class="mf">0.037991833</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0030139738</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012506061</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020538852</span><span class="p">,</span> <span class="mf">0.07347958</span><span class="p">,</span> <span class="mf">0.021088123</span><span class="p">,</span> <span class="mf">0.015355857</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019658286</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0010304014</span><span class="p">,</span> <span class="mf">0.0010367308</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0011895543</span><span class="p">,</span> <span class="mf">0.03294703</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009129162</span><span class="p">,</span> <span class="mf">0.052312456</span><span class="p">,</span> <span class="mf">0.02493031</span><span class="p">,</span> <span class="mf">0.025089836</span><span class="p">,</span> <span class="mf">0.02234913</span><span class="p">,</span> <span class="mf">0.010121085</span><span class="p">,</span> <span class="mf">0.004974439</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017856015</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04785278</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06071542</span><span class="p">,</span> <span class="mf">0.024878934</span><span class="p">,</span> <span class="mf">0.022103539</span><span class="p">,</span> <span class="mf">0.060682718</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029474825</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.030727727</span><span class="p">,</span> <span class="mf">0.0070011443</span><span class="p">,</span> <span class="mf">0.012871844</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.036305573</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04627666</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042255938</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.035090264</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025596995</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0038353072</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023908876</span><span class="p">,</span> <span class="mf">0.034437925</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011242904</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037104122</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017154701</span><span class="p">,</span> <span class="mf">0.014371906</span><span class="p">,</span> <span class="mf">0.0004429378</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.070667475</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.021502772</span><span class="p">,</span> <span class="mf">0.003996584</span><span class="p">,</span> <span class="mf">0.0016655694</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0037696788</span><span class="p">,</span> <span class="mf">0.018496107</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0061283647</span><span class="p">,</span> <span class="mf">0.029722132</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.030419748</span><span class="p">,</span> <span class="mf">0.008249602</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034229085</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034054644</span><span class="p">,</span> <span class="mf">0.0022367463</span><span class="p">,</span> <span class="mf">0.006322647</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0008654106</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013552419</span><span class="p">,</span> <span class="mf">0.06015992</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04670435</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017072657</span><span class="p">,</span> <span class="mf">0.011510181</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014638132</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01768795</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045838796</span><span class="p">,</span> <span class="mf">0.0074388813</span><span class="p">,</span> <span class="mf">0.014886965</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.026288446</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017072698</span><span class="p">,</span> <span class="mf">0.018787256</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0076605147</span><span class="p">,</span> <span class="mf">0.043190476</span><span class="p">,</span> <span class="mf">0.001253275</span><span class="p">,</span> <span class="mf">0.040448133</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.046431907</span><span class="p">,</span> <span class="mf">0.06465034</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0042557577</span><span class="p">,</span> <span class="mf">0.035780855</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007854722</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.033858318</span><span class="p">,</span> <span class="mf">0.013364367</span><span class="p">,</span> <span class="mf">0.0051386314</span><span class="p">,</span> <span class="mf">0.048734456</span><span class="p">,</span> <span class="mf">0.028555216</span><span class="p">,</span> <span class="mf">0.03291735</span><span class="p">,</span> <span class="mf">0.051106986</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04020619</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.039092552</span><span class="p">,</span> <span class="mf">0.0004201808</span><span class="p">,</span> <span class="mf">0.0558873</span><span class="p">,</span> <span class="mf">0.0020150295</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.060250822</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015357823</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014334893</span><span class="p">,</span> <span class="mf">0.038407065</span><span class="p">,</span> <span class="mf">0.062022515</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010649503</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020467315</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.055101153</span><span class="p">,</span> <span class="mf">0.031293012</span><span class="p">,</span> <span class="mf">0.018142227</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029579649</span><span class="p">,</span> <span class="mf">0.06103102</span><span class="p">,</span> <span class="mf">0.03194345</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02866799</span><span class="p">,</span> <span class="mf">0.016186291</span><span class="p">,</span> <span class="mf">0.025313077</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01804975</span><span class="p">,</span> <span class="mf">0.022064071</span><span class="p">,</span> <span class="mf">0.057739165</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020422406</span><span class="p">,</span> <span class="mf">0.015787605</span><span class="p">,</span> <span class="mf">0.023415362</span><span class="p">,</span> <span class="mf">0.035081822</span><span class="p">,</span> <span class="mf">0.03416815</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0037626491</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010472144</span><span class="p">,</span> <span class="mf">0.005786563</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029405741</span><span class="p">,</span> <span class="mf">0.020895246</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0357163</span><span class="p">,</span> <span class="mf">0.03586897</span><span class="p">,</span> <span class="mf">0.01803324</span><span class="p">,</span> <span class="mf">0.0036253817</span><span class="p">,</span> <span class="mf">0.023799744</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02189161</span><span class="p">,</span> <span class="mf">0.0013853569</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05124004</span><span class="p">,</span> <span class="mf">0.006333707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028821146</span><span class="p">,</span> <span class="mf">0.018659985</span><span class="p">,</span> <span class="mf">0.020827137</span><span class="p">,</span> <span class="mf">0.022584653</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.026804551</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.050562136</span><span class="p">,</span> <span class="mf">0.004859809</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00022457466</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.060961388</span><span class="p">,</span> <span class="mf">0.034191944</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0520906</span><span class="p">,</span> <span class="mf">0.012428855</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0026420208</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013416474</span><span class="p">,</span> <span class="mf">0.006723866</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00907954</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.050680887</span><span class="p">,</span> <span class="mf">0.020570999</span><span class="p">,</span> <span class="mf">0.07329765</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.021525482</span><span class="p">,</span> <span class="mf">0.044000793</span><span class="p">,</span> <span class="mf">0.022455772</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.054601602</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001437439</span><span class="p">,</span> <span class="mf">0.007880718</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027988305</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01858485</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012942602</span><span class="p">,</span> <span class="mf">0.033937123</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028871242</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037330575</span><span class="p">,</span> <span class="mf">0.0034082544</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012213574</span><span class="p">,</span> <span class="mf">0.027358947</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012678767</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0012281493</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008216995</span><span class="p">,</span> <span class="mf">0.0098119145</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013236902</span><span class="p">,</span> <span class="mf">0.035422873</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05698667</span><span class="p">,</span> <span class="mf">0.026304422</span><span class="p">,</span> <span class="mf">0.025371647</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0687202</span><span class="p">,</span> <span class="mf">0.047070544</span><span class="p">,</span> <span class="mf">0.0033676485</span><span class="p">,</span> <span class="mf">0.01868831</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042346913</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.047602106</span><span class="p">,</span> <span class="mf">0.0009473163</span><span class="p">,</span> <span class="mf">0.0047479523</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025525795</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06124635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0013746346</span><span class="p">,</span> <span class="mf">0.012058469</span><span class="p">,</span> <span class="mf">0.044922817</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.031448822</span><span class="p">,</span> <span class="mf">0.019288784</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012294686</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0029466779</span><span class="p">,</span> <span class="mf">0.022633798</span><span class="p">,</span> <span class="mf">0.046065114</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032607388</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05304123</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007924773</span><span class="p">,</span> <span class="mf">0.03622815</span><span class="p">,</span> <span class="mf">0.01062153</span><span class="p">,</span> <span class="mf">0.019646611</span><span class="p">,</span> <span class="mf">0.0034436306</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037126176</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018911213</span><span class="p">,</span> <span class="mf">0.018784648</span><span class="p">,</span> <span class="mf">0.024862075</span><span class="p">,</span> <span class="mf">0.042500857</span><span class="p">,</span> <span class="mf">0.006417808</span><span class="p">,</span> <span class="mf">0.019235246</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013034909</span><span class="p">,</span> <span class="mf">0.018130388</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0013267407</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00083176536</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00448969</span><span class="p">,</span> <span class="mf">0.018655175</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057097565</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.030697485</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013828505</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05019637</span><span class="p">,</span> <span class="mf">0.0043303664</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014013816</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0069711655</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00027030072</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.060510688</span><span class="p">,</span> <span class="mf">0.0023435664</span><span class="p">,</span> <span class="mf">0.015674897</span><span class="p">,</span> <span class="mf">0.05176054</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014777224</span><span class="p">,</span> <span class="mf">0.03503745</span><span class="p">,</span> <span class="mf">0.02785944</span><span class="p">,</span> <span class="mf">0.029323699</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009299999</span><span class="p">,</span> <span class="mf">0.06398674</span><span class="p">,</span> <span class="mf">0.046859678</span><span class="p">,</span> <span class="mf">0.030094558</span><span class="p">,</span> <span class="mf">0.01259041</span><span class="p">,</span> <span class="mf">0.036267675</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.052898552</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0006897955</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042908654</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0008491797</span><span class="p">,</span> <span class="mf">0.0071274517</span><span class="p">,</span> <span class="mf">0.04439769</span><span class="p">,</span> <span class="mf">0.0022068666</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.033317126</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.041258458</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0012851228</span><span class="p">,</span> <span class="mf">0.010489072</span><span class="p">,</span> <span class="mf">0.025735304</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011091368</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045162655</span><span class="p">,</span> <span class="mf">0.04294225</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007700677</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013193355</span><span class="p">,</span> <span class="mf">0.004827113</span><span class="p">,</span> <span class="mf">0.03687263</span><span class="p">,</span> <span class="mf">0.027334342</span><span class="p">,</span> <span class="mf">0.01824656</span><span class="p">,</span> <span class="mf">0.018245494</span><span class="p">,</span> <span class="mf">0.02662087</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034855142</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0003569712</span><span class="p">,</span> <span class="mf">0.080406114</span><span class="p">,</span> <span class="mf">0.0018468174</span><span class="p">,</span> <span class="mf">0.013922922</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018535022</span><span class="p">,</span> <span class="mf">0.03824286</span><span class="p">,</span> <span class="mf">0.043014415</span><span class="p">,</span> <span class="mf">0.03012092</span><span class="p">,</span> <span class="mf">0.00803271</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03232023</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.036566664</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04382392</span><span class="p">,</span> <span class="mf">0.0040705246</span><span class="p">,</span> <span class="mf">0.0150932595</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0033885865</span><span class="p">,</span> <span class="mf">0.019958686</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034229252</span><span class="p">,</span> <span class="mf">0.011928538</span><span class="p">,</span> <span class="mf">0.02391127</span><span class="p">,</span> <span class="mf">0.04755791</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029175205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04682454</span><span class="p">,</span> <span class="mf">0.02338032</span><span class="p">,</span> <span class="mf">0.031248016</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06120794</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.039181888</span><span class="p">,</span> <span class="mf">0.042640693</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008935619</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.115602e-05</span><span class="p">,</span> <span class="mf">0.025923697</span><span class="p">,</span> <span class="mf">0.03046568</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032538872</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07774579</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.047744945</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032523815</span><span class="p">,</span> <span class="mf">0.013560552</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019092428</span><span class="p">,</span> <span class="mf">0.031365734</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0022067484</span><span class="p">,</span> <span class="mf">0.032985773</span><span class="p">,</span> <span class="mf">0.01676509</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.038079567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011245432</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018426247</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00963427</span><span class="p">,</span> <span class="mf">0.036454313</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04823799</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007587352</span><span class="p">,</span> <span class="mf">0.008115187</span><span class="p">,</span> <span class="mf">0.048818875</span><span class="p">,</span> <span class="mf">0.0153698195</span><span class="p">,</span> <span class="mf">0.0077248164</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01555647</span><span class="p">,</span> <span class="mf">0.04640162</span><span class="p">,</span> <span class="mf">0.042655896</span><span class="p">,</span> <span class="mf">0.02184045</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034443665</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05343133</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0039155954</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017624898</span><span class="p">,</span> <span class="mf">0.055692866</span><span class="p">,</span> <span class="mf">0.021329513</span><span class="p">,</span> <span class="mf">0.058465578</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015564522</span><span class="p">,</span> <span class="mf">0.02277778</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012915606</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007953365</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0055068564</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02201194</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025188457</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016094543</span><span class="p">,</span> <span class="mf">0.013643234</span><span class="p">,</span> <span class="mf">0.031373184</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01611006</span><span class="p">,</span> <span class="mf">0.005265972</span><span class="p">,</span> <span class="mf">0.040668696</span><span class="p">,</span> <span class="mf">0.012431018</span><span class="p">,</span> <span class="mf">0.047379185</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010484066</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.080858625</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010537491</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02135213</span><span class="p">,</span> <span class="mf">0.060060862</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028551204</span><span class="p">,</span> <span class="mf">0.01085753</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0044772346</span><span class="p">,</span> <span class="mf">0.011353918</span><span class="p">,</span> <span class="mf">0.069825746</span><span class="p">,</span> <span class="mf">0.0012897643</span><span class="p">,</span> <span class="mf">0.045575302</span><span class="p">,</span> <span class="mf">0.050233044</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04639454</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043274533</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0088698305</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009285012</span><span class="p">,</span> <span class="mf">0.029509</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057046</span><span class="p">,</span> <span class="mf">0.019981181</span><span class="p">,</span> <span class="mf">0.030096136</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06739518</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04110572</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00971853</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0312545</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.051547002</span><span class="p">,</span> <span class="mf">0.048084266</span><span class="p">,</span> <span class="mf">0.012502023</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010466205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.004660218</span><span class="p">,</span> <span class="mf">0.011354275</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.044684965</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027086467</span><span class="p">,</span> <span class="mf">0.023491893</span><span class="p">,</span> <span class="mf">0.042202327</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042279933</span><span class="p">,</span> <span class="mf">0.06430072</span><span class="p">,</span> <span class="mf">0.0076309554</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043298926</span><span class="p">,</span> <span class="mf">0.025694486</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.033425454</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022714725</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037531648</span><span class="p">,</span> <span class="mf">0.05346618</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02026543</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.048849754</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.007577428</span><span class="p">,</span> <span class="mf">0.026761733</span><span class="p">,</span> <span class="mf">0.017290449</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057991516</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016920853</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027190786</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00909436</span><span class="p">,</span> <span class="mf">0.032961052</span><span class="p">,</span> <span class="mf">0.017874414</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06763719</span><span class="p">,</span> <span class="mf">0.0006165022</span><span class="p">,</span> <span class="mf">0.0087364875</span><span class="p">,</span> <span class="mf">0.0142304795</span><span class="p">,</span> <span class="mf">0.030081693</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0038981324</span><span class="p">,</span> <span class="mf">0.011335561</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0009760232</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.062857576</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0141597055</span><span class="p">,</span> <span class="mf">0.051928427</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0019329971</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005905841</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027917175</span><span class="p">,</span> <span class="mf">0.024023794</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029292746</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03817091</span><span class="p">,</span> <span class="mf">0.0005423172</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011840818</span><span class="p">,</span> <span class="mf">0.044430126</span><span class="p">,</span> <span class="mf">0.016287055</span><span class="p">,</span> <span class="mf">0.03094146</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.026098186</span><span class="p">,</span> <span class="mf">0.0069974707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.048900567</span><span class="p">,</span> <span class="mf">0.026985843</span><span class="p">,</span> <span class="mf">0.022422804</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019137315</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037108816</span><span class="p">,</span> <span class="mf">0.038627103</span><span class="p">,</span> <span class="mf">0.038475305</span><span class="p">,</span> <span class="mf">0.017588839</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04594434</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022467958</span><span class="p">,</span> <span class="mf">0.026242614</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.003626525</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005459161</span><span class="p">,</span> <span class="mf">0.005077498</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.054963883</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.038264934</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032436837</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042729624</span><span class="p">,</span> <span class="mf">0.013707538</span><span class="p">,</span> <span class="mf">0.020233767</span><span class="p">,</span> <span class="mf">0.038336527</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015694082</span><span class="p">,</span> <span class="mf">0.013093894</span><span class="p">,</span> <span class="mf">0.0052572903</span><span class="p">,</span> <span class="mf">0.023632064</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08146409</span><span class="p">,</span> <span class="mf">0.050827812</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019896386</span><span class="p">,</span> <span class="mf">0.010401246</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06778004</span><span class="p">,</span> <span class="mf">0.021781597</span><span class="p">,</span> <span class="mf">0.04689888</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04319867</span><span class="p">,</span> <span class="mf">0.016965883</span><span class="p">,</span> <span class="mf">0.022130005</span><span class="p">,</span> <span class="mf">0.023766624</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013749355</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0060635735</span><span class="p">,</span> <span class="mf">0.06975141</span><span class="p">,</span> <span class="mf">0.018952014</span><span class="p">,</span> <span class="mf">0.0069972123</span><span class="p">,</span> <span class="mf">0.00504026</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023830919</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037890524</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016333593</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0120985545</span><span class="p">,</span> <span class="mf">0.038249396</span><span class="p">,</span> <span class="mf">0.02512755</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.033442978</span><span class="p">,</span> <span class="mf">0.025615495</span><span class="p">,</span> <span class="mf">0.06467917</span><span class="p">,</span> <span class="mf">0.018649945</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0045876806</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029679516</span><span class="p">,</span> <span class="mf">0.007530205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0055214935</span><span class="p">,</span> <span class="mf">0.020197572</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.024790697</span><span class="p">,</span> <span class="mf">0.03483397</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.024737723</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018295601</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042120326</span><span class="p">,</span> <span class="mf">0.01887309</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009808555</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023777742</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.061494462</span><span class="p">,</span> <span class="mf">0.01789982</span><span class="p">,</span> <span class="mf">0.02538138</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008253647</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.035184555</span><span class="p">,</span> <span class="mf">0.03329778</span><span class="p">,</span> <span class="mf">0.01434242</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010552813</span><span class="p">,</span> <span class="mf">0.03156485</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012651758</span><span class="p">,</span> <span class="mf">0.015550292</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012159424</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008866914</span><span class="p">,</span> <span class="mf">0.03016665</span><span class="p">,</span> <span class="mf">0.00047264615</span><span class="p">,</span> <span class="mf">0.002137789</span><span class="p">,</span> <span class="mf">0.03800385</span><span class="p">,</span> <span class="mf">0.013032143</span><span class="p">,</span> <span class="mf">0.038531527</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023826802</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.026870178</span><span class="p">,</span> <span class="mf">0.008296305</span><span class="p">,</span> <span class="mf">0.011327403</span><span class="p">,</span> <span class="mf">0.011354583</span><span class="p">,</span> <span class="mf">0.008343737</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03011617</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01695832</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.030502837</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.056637384</span><span class="p">,</span> <span class="mf">0.007969275</span><span class="p">,</span> <span class="mf">0.005983118</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014082555</span><span class="p">,</span> <span class="mf">0.008388151</span><span class="p">,</span> <span class="mf">0.0041729757</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.002980083</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02793856</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0040570614</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03271183</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014064461</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0038818293</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.021579802</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011951472</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009213087</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04639352</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019941697</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00862354</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.040463027</span><span class="p">,</span> <span class="mf">0.0027768584</span><span class="p">,</span> <span class="mf">0.036274806</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.006100972</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019409427</span><span class="p">,</span> <span class="mf">0.019028286</span><span class="p">,</span> <span class="mf">0.020864759</span><span class="p">,</span> <span class="mf">0.023779923</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043357033</span><span class="p">,</span> <span class="mf">0.014085626</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029877884</span><span class="p">,</span> <span class="mf">0.0026885546</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020892423</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0138810035</span><span class="p">,</span> <span class="mf">1.2074211e-05</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010356221</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.047326554</span><span class="p">,</span> <span class="mf">0.0014202517</span><span class="p">,</span> <span class="mf">0.041650508</span><span class="p">,</span> <span class="mf">0.008155009</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01450383</span><span class="p">,</span> <span class="mf">0.014305613</span><span class="p">,</span> <span class="mf">0.06366619</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02081839</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00822323</span><span class="p">,</span> <span class="mf">0.048510242</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0037666806</span><span class="p">,</span> <span class="mf">0.023664556</span><span class="p">,</span> <span class="mf">0.0045068995</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.032586563</span><span class="p">,</span> <span class="mf">0.021237116</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02607813</span><span class="p">,</span> <span class="mf">0.042608</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023525318</span><span class="p">,</span> <span class="mf">0.021150945</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0029519917</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008412834</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0152705945</span><span class="p">,</span> <span class="mf">0.022217998</span><span class="p">,</span> <span class="mf">0.0040978184</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028645568</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011396287</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04190508</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0040457537</span><span class="p">,</span> <span class="mf">0.0373357</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025256395</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.066077806</span><span class="p">,</span> <span class="mf">0.00964128</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04682747</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03272878</span><span class="p">,</span> <span class="mf">0.027395088</span><span class="p">,</span> <span class="mf">0.024279382</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005157404</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018477073</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07227116</span><span class="p">,</span> <span class="mf">0.0078007714</span><span class="p">,</span> <span class="mf">0.033792075</span><span class="p">,</span> <span class="mf">0.0087622525</span><span class="p">,</span> <span class="mf">0.024143495</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017744526</span><span class="p">,</span> <span class="mf">0.06872509</span><span class="p">,</span> <span class="mf">0.029899307</span><span class="p">,</span> <span class="mf">0.015984805</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0032637268</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020403294</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01518212</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03185177</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03993953</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0066711167</span><span class="p">,</span> <span class="mf">0.017834764</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013637137</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034408275</span><span class="p">,</span> <span class="mf">0.00044049698</span><span class="p">,</span> <span class="mf">0.03190554</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0017063806</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05234689</span><span class="p">,</span> <span class="mf">0.010903661</span><span class="p">,</span> <span class="mf">0.013306636</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057937864</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.004879621</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022680474</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057177156</span><span class="p">,</span> <span class="mf">0.012787167</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0035027317</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012204662</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.043406643</span><span class="p">,</span> <span class="mf">0.0021993837</span><span class="p">,</span> <span class="mf">0.029110951</span><span class="p">,</span> <span class="mf">0.071350016</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.018334549</span><span class="p">,</span> <span class="mf">0.005950288</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.042299487</span><span class="p">,</span> <span class="mf">0.011649722</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05013199</span><span class="p">,</span> <span class="mf">0.012960693</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0038134519</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015828637</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0036978805</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014976756</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027449084</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.051304407</span><span class="p">,</span> <span class="mf">0.03896375</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.026833659</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04779689</span><span class="p">,</span> <span class="mf">0.008757001</span><span class="p">,</span> <span class="mf">0.022397019</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022991782</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.019497303</span><span class="p">,</span> <span class="mf">0.0035975624</span><span class="p">,</span> <span class="mf">0.017831575</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016879983</span><span class="p">,</span> <span class="mf">0.005123394</span><span class="p">,</span> <span class="mf">0.04163835</span><span class="p">,</span> <span class="mf">0.0020756787</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009649309</span><span class="p">,</span> <span class="mf">0.022750607</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.036457054</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02670016</span><span class="p">,</span> <span class="mf">0.042065192</span><span class="p">,</span> <span class="mf">0.019326141</span><span class="p">,</span> <span class="mf">0.06558085</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022085935</span><span class="p">,</span> <span class="mf">0.0010581234</span><span class="p">,</span> <span class="mf">0.019861665</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011214135</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.028121853</span><span class="p">,</span> <span class="mf">0.011319331</span><span class="p">,</span> <span class="mf">0.0050522136</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03485415</span><span class="p">,</span> <span class="mf">0.030448683</span><span class="p">,</span> <span class="mf">0.0029888002</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01445645</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.014735276</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01375081</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.048828777</span><span class="p">,</span> <span class="mf">0.03580206</span><span class="p">,</span> <span class="mf">0.027761148</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05064619</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011247271</span><span class="p">,</span> <span class="mf">0.04609971</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.003069608</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05282368</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034661315</span><span class="p">,</span> <span class="mf">0.033407543</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025460843</span><span class="p">,</span> <span class="mf">0.008799487</span><span class="p">,</span> <span class="mf">0.0091642765</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008024074</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0047479337</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016529204</span><span class="p">,</span> <span class="mf">0.024267333</span><span class="p">,</span> <span class="mf">0.035559356</span><span class="p">,</span> <span class="mf">0.07985593</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05046684</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06790705</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0071336497</span><span class="p">,</span> <span class="mf">0.011956307</span><span class="p">,</span> <span class="mf">0.009010545</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022069622</span><span class="p">,</span> <span class="mf">0.04654688</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.004984532</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05698449</span><span class="p">,</span> <span class="mf">0.02789896</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.006470848</span><span class="p">,</span> <span class="mf">0.16390756</span><span class="p">,</span> <span class="mf">0.008620992</span><span class="p">,</span> <span class="mf">0.0386373</span><span class="p">,</span> <span class="mf">0.004040578</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012715728</span><span class="p">,</span> <span class="mf">0.0032905366</span><span class="p">,</span> <span class="mf">0.03312697</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0031326956</span><span class="p">,</span> <span class="mf">0.033616826</span><span class="p">,</span> <span class="mf">0.0037641323</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.011224089</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0056482824</span><span class="p">,</span> <span class="mf">0.045344375</span><span class="p">,</span> <span class="mf">0.034810774</span><span class="p">,</span> <span class="mf">0.011302915</span><span class="p">,</span> <span class="mf">0.031056117</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.020407017</span><span class="p">,</span> <span class="mf">0.021102114</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.012683138</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03400104</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015533739</span><span class="p">,</span> <span class="mf">0.03215273</span><span class="p">,</span> <span class="mf">0.014327467</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.029942159</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017634615</span><span class="p">,</span> <span class="mf">0.044326916</span><span class="p">,</span> <span class="mf">0.014144142</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0061987154</span><span class="p">,</span> <span class="mf">0.021549068</span><span class="p">,</span> <span class="mf">0.0029852581</span><span class="p">,</span> <span class="mf">0.042642772</span><span class="p">,</span> <span class="mf">0.012904342</span><span class="p">,</span> <span class="mf">0.013874272</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.023662219</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017450072</span><span class="p">,</span> <span class="mf">0.024523398</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.013644247</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.049777966</span><span class="p">,</span> <span class="mf">0.029591223</span><span class="p">,</span> <span class="mf">0.0073114377</span><span class="p">,</span> <span class="mf">0.007386899</span><span class="p">,</span> <span class="mf">0.02843572</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017737953</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.034420118</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.057508748</span><span class="p">,</span> <span class="mf">0.056002054</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.049297955</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01018815</span><span class="p">,</span> <span class="mf">0.014461512</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.008235714</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.022464707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.039012287</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.009419257</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05011966</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06671197</span><span class="p">,</span> <span class="mf">0.03013893</span><span class="p">,</span> <span class="mf">0.0028313391</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0165345</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06355927</span><span class="p">,</span> <span class="mf">0.022126166</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0014949412</span><span class="p">,</span> <span class="mf">0.038758017</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02068345</span><span class="p">,</span> <span class="mf">0.028776323</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.041437782</span><span class="p">,</span> <span class="mf">0.018729644</span><span class="p">,</span> <span class="mf">0.037065763</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017174859</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010060867</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.037954986</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015225971</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.017563468</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04180092</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.040190753</span><span class="p">,</span> <span class="mf">0.009099932</span><span class="p">,</span> <span class="mf">0.007841908</span><span class="p">,</span> <span class="mf">0.010079515</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0028929978</span><span class="p">,</span> <span class="mf">0.014422519</span><span class="p">,</span> <span class="mf">0.041526373</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025540803</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04385223</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0336605</span><span class="p">,</span> <span class="mf">0.016504893</span><span class="p">,</span> <span class="mf">0.008888867</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025477355</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0071784807</span><span class="p">,</span> <span class="mf">0.01078627</span><span class="p">,</span> <span class="mf">0.026098343</span><span class="p">,</span> <span class="mf">0.028917082</span><span class="p">,</span> <span class="mf">0.055467572</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.027621781</span><span class="p">,</span> <span class="mf">0.015327966</span><span class="p">,</span> <span class="mf">0.03297872</span><span class="p">,</span> <span class="mf">0.027355123</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Given the relativistic nature of word vectors, if mapped to a Cartesian plane of <em>n</em> dimensions, the vectors of words that share similar meanings will be closer to each other than the vectors of words that are semantically dissimilar.</p>
+<p><img alt="Vector Space Concept" src="../_images/vector_space.png" /></p>
+<p>Given this mathematical reality, we can calculate how similar any two words are by calculating the cosign similarity of two word vectors.  The more similar the two vectors are, the more semantically similar the two words are.</p>
+<p>We can extend this vector space concept to deal with entire texts by averaging all of the word vectors for each text into text-vector representations of each text and then calculating the similarity of the text-vectors using same cosign similarity measure.  The more similar the cosign similarities of the two text-vectors, the more semantically similar the two texts are.</p>
+<p>This process could be extended yet again to classify and compare entire corpora.</p>
+</section>
+<section id="environment-setup">
+<h2><span class="section-number">5.2. </span>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
+<p>To work directly with the embedding vectors you must download the Ollama vector model as a separate model.  To do so, run the following command from your CLI.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ollama</span> <span class="n">pull</span> <span class="n">mxbai</span><span class="o">-</span><span class="n">embed</span><span class="o">-</span><span class="n">large</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieval-augmented-generation-rag">
+<h2><span class="section-number">5.3. </span>Retrieval-Augmented Generation (RAG)<a class="headerlink" href="#retrieval-augmented-generation-rag" title="Link to this heading">#</a></h2>
+<p>RAGs are a popular way of working directly with LLM models to leverage their power to direct people towards libraries of existing texts that relate to their specific prompts/queries.  For example, Help Desk chatbots frequently use RAGS to deliver specific help documentation to users based on their prompts rather than simply generating a response directly from the LLM. Using a RAG framework, for example, one could create a chatbot that receives medical queries and uses RAG to find relevant, peer-reviewed journal papers and returns a relevant list of those articles to the user instead of an AI generated summary of everything ever said about the query.</p>
+<p>Here we will build a simple RAG application based on Ollama text embedding vectors.  For this example, we are providing the retrieval library and user prompt programmatically, but the code could be easily modified to use a training corpus that is stored on disk and to receive the prompt programmatically (as we did in our chatbot example earlier).</p>
+<p>Our first step is to load the libraries that we will need for our RAG into our Python environment.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ollama</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
+</pre></div>
+</div>
+<p>Now that our environment is ready, let’s define the corpus of texts that are available for retrieval and delivery based on our prompt.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s2">&quot;Llamas are members of the camelid family meaning they&#39;re pretty closely related to vicuñas and camels&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas were first domesticated and used as pack animals 4,000 to 5,000 years ago in the Peruvian highlands&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas can grow as much as 6 feet tall though the average llama between 5 feet 6 inches and 5 feet 9 inches tall&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas weigh between 280 and 450 pounds and can carry 25 to 30 percent of their body weight&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas are vegetarians and have very efficient digestive systems&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas live to be about 20 years old, though some only live for 15 years and others live to be 30 years old&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>We’ll also here provide our hard-coded user prompt.  As noted earlier, in a real-world application this would be dynamically received, as in our earlier Chatbot exercise.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;What animals are llamas related to?&quot;</span>
+</pre></div>
+</div>
+<p>Next, we need to gather the embedding vectors for each of the training texts in our <em>documents</em> collection.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># create an empty list to hold the returned embeddings for each document</span>
+<span class="n">embed_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># store each document embedded space in a list</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;mxbai-embed-large&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+  <span class="n">embeddings</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;embeddings&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">embed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <em>embed_list</em> object now holds a collection of document vectors, one each for each of the texts in our training corpus.</p>
+<p>At this point, we are ready to process a user query to our RAG.  We’ve already defined our text query in a <em>prompt</em> variable.  Our first action is to generate a vector that represents the embedded space our prompt.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the imbedded space for the prompt</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span>
+  <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mxbai-embed-large&quot;</span><span class="p">,</span>
+  <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span>
+<span class="p">)</span>
+
+<span class="c1"># get just the embeddings vector from the response</span>
+<span class="n">prompt_vector</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;embeddings&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Our <em>prompt_vector</em> variable now contains the vector representation of our prompt. With this in hand, we can now compare the prompt_vector to each of the training texts vectors using a cosign similarity measure.  The most similar vector represents the text from our document set that most closely semantically matches our prompt.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># set some base values</span>
+<span class="n">max_similarity</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">most_similar</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># loop through our training data and calculate vector similarity to target</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">embed_list</span><span class="p">)):</span>
+   <span class="c1"># calculate cosign somilarity between prompt vector and training vector</span>
+   <span class="n">cosine_similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">embed_list</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">prompt_vector</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">embed_list</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="n">norm</span><span class="p">(</span><span class="n">prompt_vector</span><span class="p">))</span>
+   <span class="c1"># check if this is more or less similar than last vector and update return values accordingly</span>
+   <span class="k">if</span> <span class="n">cosine_similarity</span> <span class="o">&gt;</span> <span class="n">max_similarity</span><span class="p">:</span>
+        <span class="n">max_similarity</span> <span class="o">=</span> <span class="n">cosine_similarity</span>
+        <span class="n">most_similar</span> <span class="o">=</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>Now that we’ve identified the most similar text in our document library, we return that document to the user as the answer to their prompt.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">most_similar</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="n">most_similar</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nothing similar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="putting-it-all-together-the-complete-rag">
+<h2><span class="section-number">5.4. </span>Putting it all together - the complete RAG<a class="headerlink" href="#putting-it-all-together-the-complete-rag" title="Link to this heading">#</a></h2>
+<p>The code below presents the complete code for our simple RAG workflow.  Inline comments explain each step of the RAG process.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ollama</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
+
+<span class="c1"># define a set of training documments.  [These would normally be loaded from a collection</span>
+<span class="c1"># of files on the computer]</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s2">&quot;Llamas are members of the camelid family meaning they&#39;re pretty closely related to vicuñas and camels&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas were first domesticated and used as pack animals 4,000 to 5,000 years ago in the Peruvian highlands&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas can grow as much as 6 feet tall though the average llama between 5 feet 6 inches and 5 feet 9 inches tall&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas weigh between 280 and 450 pounds and can carry 25 to 30 percent of their body weight&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas are vegetarians and have very efficient digestive systems&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Llamas live to be about 20 years old, though some only live for 15 years and others live to be 30 years old&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># set a user prompt (normally we&#39;d do this through a user input)</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;What animals are llamas related to?&quot;</span>
+
+<span class="c1"># create an empty list to hold the returned embeddings for each document</span>
+<span class="n">embed_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># store each document embedded space in a list</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;mxbai-embed-large&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+  <span class="n">embeddings</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;embeddings&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">embed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+
+<span class="c1"># embed_list now contains a list of document vectors for the augmenting documents</span>
+
+<span class="c1"># get the imbedded space for the prompt</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span>
+  <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mxbai-embed-large&quot;</span><span class="p">,</span>
+  <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span>
+<span class="p">)</span>
+
+<span class="c1"># get just the embeddings vector from the response</span>
+<span class="n">prompt_vector</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;embeddings&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># set some base values</span>
+<span class="n">max_similarity</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">most_similar</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># loop through our training data and calculate vector similarity to target</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">embed_list</span><span class="p">)):</span>
+   <span class="c1"># calculate cosign somilarity between prompt vector and training vector</span>
+   <span class="n">cosine_similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">embed_list</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">prompt_vector</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">embed_list</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="n">norm</span><span class="p">(</span><span class="n">prompt_vector</span><span class="p">))</span>
+   <span class="c1"># check if this is more or less similar than last vector and update return values accordingly</span>
+   <span class="k">if</span> <span class="n">cosine_similarity</span> <span class="o">&gt;</span> <span class="n">max_similarity</span><span class="p">:</span>
+        <span class="n">max_similarity</span> <span class="o">=</span> <span class="n">cosine_similarity</span>
+        <span class="n">most_similar</span> <span class="o">=</span> <span class="n">n</span>
+
+<span class="c1"># return the most similar document fromt the training set</span>
+<span class="k">if</span> <span class="n">most_similar</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="n">most_similar</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nothing similar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapters"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_Interacting_via_python.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>The Ollama Python Library</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-vector-space-concept">5.1. The Vector Space Concept</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">5.2. Environment Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-augmented-generation-rag">5.3. Retrieval-Augmented Generation (RAG)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together-the-complete-rag">5.4. Putting it all together - the complete RAG</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr. Carl G. Stahmer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+  <img alt="CC BY-SA 4.0" src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg"> 
+</a>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
