@@ -1,7 +1,7 @@
 Overview
 ========
 
-YOUR DESCRIPTION
+Avoid the privacy issues of sending prompts to cloud based large language models (LLMs like ChatGPT) by installing and managing a local instance of Ollama, an open source downloadable LLM and API. We’ll set up a chatbot and practice directly querying the LLM for generative outputs, text clustering, and classification.
 
 
 Learning Goals
@@ -9,59 +9,23 @@ Learning Goals
 
 After completing this workshop, learners should be able to:
 
-LEARNING GOALS
+* Describe control, customization, and data privacy issues of cloud-based AI systems
+* Install Ollama in your local environment
+* Deploy and a chatbot
+* Deploy a Retrieval-Augmented Generation (RAG) application
+* Understand how to conduct text clustering and classification on a corpus using LLMs
 
 
 Prerequisites
 -------------
 
-<!--
-No prior programming experience is necessary. Learners should commit to
-attending all four sessions of this series.
-
-These workshops are not an introduction to Python. Learners must have taken
-[DataLab’s Python Basics workshop series][basics] or have equivalent prior
-experience using Python.
-
-[basics]: https://ucdavisdatalab.github.io/workshop_python_basics/
-
-These workshops are not an introduction to R. Learners must have taken
-[DataLab’s R Basics workshop series][basics] or have equivalent prior
-experience using R.
-
-[basics]: https://ucdavisdatalab.github.io/workshop_r_basics/
--->
-
-
-YOUR PREQUISITES
+This workshop is not an introduction to programming; learners should have basic fluency in Python if they would like to code along.
 
 
 Computing Requirements
 ----------------------
 
-<!--
-Before the workshop, please make sure your computer has a working internet
-connection and the most recent versions of the following software:
+To code along during the workshop users must have:
 
-* [Anaconda Distribution][anaconda], which by default includes:
-  + [Python 3][python]
-  + [conda][]
-  + [JupyterLab][jupyter]
-
-* [R][r]
-
-You can find step-by-step installation instructions in [DataLab's Python
-Install Guide][install-guide]. If you need additional help, come chat with us
-in [DataLab's Office Hours][oh].
-
-[anaconda]: https://www.anaconda.com/
-[python]: https://www.python.org/
-[conda]: https://docs.conda.io/en/latest/
-[jupyter]: https://jupyter.org/
-
-[r]: https://www.r-project.org/
-[rstudio]: https://posit.co/products/open-source/rstudio/
-
-[install-guide]: https://ucdavisdatalab.github.io/install_guides/python-and-python-tools.html#python-and-python-tools
-[oh]: https://datalab.ucdavis.edu/office-hours/
--->
+* A local computer on which they have administrative rights to install software
+* A working Python environment such as Jupiter, VSCode, or via the Command Line.

@@ -9,4 +9,8 @@ options:
 
 # Chapters may be written in either Markdown or as Jupyter Notebooks
 chapters:
-  - file: chapters/01_example
+  - file: chapters/01_logistics
+  - file: chapters/02_getting_started
+  - file: chapters/03_Interacting_via_ollama_CLI
+  - file: chapters/04_Interacting_via_python
+  - file: chapters/05_Interacting_directly_with_the_model

@@ -1,9 +1,9 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: WORKSHOP TITLE
-author: YOUR NAME
-copyright: "202X"
+title: Working with Large Language Modles (LLMs) on Your Laptop
+author: Dr. Carl G. Stahmer
+copyright: "2025"
 logo: img/datalab-logo-full-color-rgb-1.png
 only_build_toc_files: true
 
@@ -24,7 +24,7 @@ latex:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/ucdavisdatalab/<YOUR REPO>
+  url: https://github.com/ucdavisdatalab/workshop_llm_with_ollama
   path_to_book: docs
 
 # Add GitHub buttons to your book

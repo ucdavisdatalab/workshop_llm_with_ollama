@@ -1,29 +1,27 @@
 Ollama Architecture
 ===================
 
-The Ollama Applicaton runs as a background server on your local machine using a classic client server architecture.
+The Ollama Application runs as a background server on your local machine using a classic client server architecture.
 
-INSERT IMAGE
+![Ollama Basic Architecture](img/ollama_architecture.png)
 
-Note that the server portion of the architecture conatins two components, and underlying, C++ application and a dedicated HTTP server that serves as an API to the Ollama applicaton iteself.  
+Note that the server portion of the architecture contains two components, and underlying, C++ application and a dedicated HTTP server that serves as an API to the Ollama application itself.  
 
-When the Ollama applicaton is launched on your computer, the C++ application initializes and stands ready to receive commands and input. But the Ollama HTTP Server will not automatically start. The only sign that you, as a user, will be given that it is running is a small llama icon in your task bar.  
-
-INSERT IMAGE
+When the Ollama application is launched on your computer, the C++ application initializes and stands ready to receive commands and input. But the Ollama HTTP Server will not automatically start. The only sign that you, as a user, will be given that it is running is a small llama icon in your task bar.  
 
 Before you can actually use Ollama, you must configure the Ollama C++ application and use it to launch the Ollama HTTP Server to allow you to interact with your chosen model.  This is accomplished via your system's Command Line Interface (CLI):
 
 * Linux:  Launch your chosen shell;
-* Mac:  Launch Applications->Utilities->Terminal applicaton
-* Windows: Launcy the Windows "Command Prompt" application by clicking on the Windows Explorer icon, searching for "CMD", and opening the "Command Prompt" application.
+* Mac:  Launch Applications->Utilities->Terminal application
+* Windows: Launch the Windows "Command Prompt" application by clicking on the Windows Explorer icon, searching for "CMD", and opening the "Command Prompt" application.
 
 Depending on your operating system, once you have launched your CLI you will see something like this:
 
-INSERT IMAGE
+![The Bash Terminal](img/terminal.png)
 
-Ollama does not include Unix-style "man" documentation, but the CLI appplication does include a simple help system.  To access help, enter the following at your command prompt:
+Ollama does not include Unix-style "man" documentation, but the CLI application does include a simple help system.  To access help, enter the following at your command prompt:
 
-```bash
+```
 ollama help
 ```  
 
@@ -63,7 +61,7 @@ We'll be learning about many of the available commands as we move through this w
 Loading Models
 --------------
 
-Ollama allows you to work with a collection of publicly available LLMs.  A complete list of available mocels can be found [here](https://ollama.com/search).  Individual models must be downloaded to your local system before ytou are able to work with them.  This is accomplished via the CLI using the "pull" command as follows:
+Ollama allows you to work with a collection of publicly available LLMs.  A complete list of available models can be found [here](https://ollama.com/search).  Individual models must be downloaded to your local system before you are able to work with them.  This is accomplished via the CLI using the "pull" command as follows:
 
 ```
 pull <model-name>
