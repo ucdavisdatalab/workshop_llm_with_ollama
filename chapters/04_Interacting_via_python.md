@@ -1,7 +1,7 @@
 The Ollama Python Library
 =========================
 
-Ollama provides a Python Library that communicates with the Ollama application via the Ollama HTTP API on your local system.  It also provides a collection of helper applications that facilitate performance of the most common language processing tasks.  Before invoking the Ollama library you must first install it into your local Python environment.  You can do so via the command line or the Python terminal of your Python IDE using the following command:
+Ollama provides a Python Library that communicates with the Ollama application via the Ollama HTTP API on your local system.  It also provides a collection of helper applications that facilitate performance of the most common language processing tasks.  Before invoking the Ollama library you must first install it into your local Python environment.  You can do so via the command line or the Python terminal of your Python integrated development environment (IDE) using the following command:
 
 ```
 pip install ollama
@@ -15,7 +15,7 @@ Note:  if working in a notebook, you can run this command directly in a code cel
 
 Configuring the API Connection
 -------------------------------------
-The Ollama Python library uses the API function of the Ollama HTTP Server to communicate with the Ollama models.  You need to set the URL for the API before you can communicate with it.  The defult URL for the Ollama HTTP Server is "http://localhost:11434". (Localhost = your local computer, 11434 = the network port that Ollama is assigned to by default). Note that in a team environment you could run Ollama on a server and access it by IP address and port 11434).
+The Ollama Python library uses the API function of the Ollama HTTP Server to communicate with the Ollama models.  You need to set the URL for the API before you can communicate with it.  The defult URL for the Ollama HTTP Server is "http://localhost:11434". (Localhost = your local computer, 11434 = the network port that Ollama is assigned to by default). Note that in a team environment you could run Ollama on a server and access it by IP address and port 11434.
 
 To configure the client via Python, we will create a python object that holds a client reference:
 
@@ -49,7 +49,7 @@ print(response['message']['content'])
 A Simple Chatbot
 ----------------
 
-We can functionalize the code above and with a little extra code build a very simple Chatbot application.
+We can functionalize the code above and, with a little extra code, build a very simple Chatbot application.
 
 ```py
 from ollama import Client
