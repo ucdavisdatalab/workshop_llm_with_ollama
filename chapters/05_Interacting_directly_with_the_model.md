@@ -1,13 +1,13 @@
 Interacting Directly with the Model
 ===================================
 
-So far, all of our interactions with the LLM have been executed via the generative prompting mechanism.  But a rich textual model lies behind the generative side of LLMs, and it is often beneficial, as well as interesting, to interact directly with the model itself, completely, or at least partially, bypassing the generative aspects of the LLM.  In this final chapter we'll setup a simple Retrieval-Augmented Generation (RAG) workflow as a means of demonstrating how interacting directly with the LLM model can be used to solve common research problems.
+So far, all of our interactions with the LLM have been executed via the generative prompting mechanism.  But, a rich textual model lies behind the generative side of LLMs and it is often beneficial, as well as interesting, to interact directly with the model itself by completely, or at least partially, bypassing the generative aspects of the LLM.  In this final chapter we'll setup a simple Retrieval-Augmented Generation (RAG) workflow as a means of demonstrating how interacting directly with the LLM model can be used to solve common research problems.
 
 The Vector Space Concept
 ------------------------
-LLMs are built primarily using a Transformer model design, which is an iteration of the word embedings models first introduced in 2013 by Mikolov, et al in [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781).  
+LLMs are built primarily using a transformer model design, which is an iteration of the word embedings models first introduced in 2013 by Mikolov et al in [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781).  
 
-Vector models represent the semantic space of every word in a known vocabulary as large vector of *n* calculated parameters, where the parametric values assigned to a given word contain weights that are related to the values of the same parameter for every other word.  The details of the various methods of calculating these weights is beyond the scope of this workshop.  (See the paper referenced in the above paragraph.). The important thing to know in this context is that if you introduce a new word or document into the model, the weights of every parameter for every work will change.  A non-mathematical way to say this is the parametric definition of each word in the model contains within it the knowledge of every other word in the model. 
+Vector models represent the semantic space of every word in a known vocabulary as a large vector of *n* calculated parameters, where the parametric values assigned to a given word contain weights that are related to the values of the same parameter for every other word.  The details of the various methods of calculating these weights is beyond the scope of this workshop.  (See the paper referenced in the above paragraph.) The important thing to know in this context is that if you introduce a new word or document into the model, the weights of every parameter for every word will change.  A non-mathematical way to say this is that the parametric definition of each word in the model contains within it the knowledge of every other word in the model. 
 
 The below output shows the vector space for a single word from the Ollama model:
 
@@ -28,7 +28,7 @@ This process could be extended yet again to classify and compare entire corpora.
 Environment Setup
 -------------------
 
-To work directly with the embedding vectors you must download the Ollama vector model as a separate model.  To do so, run the following command from your CLI.
+To work directly with the embedding vectors you must download the Ollama vector model as a separate model.  To do so, run the following command from your CLI:
 
 ```
 ollama pull mxbai-embed-large
@@ -83,7 +83,7 @@ for d in documents:
 
 The *embed_list* object now holds a collection of document vectors, one each for each of the texts in our training corpus.
 
-At this point, we are ready to process a user query to our RAG.  We've already defined our text query in a *prompt* variable.  Our first action is to generate a vector that represents the embedded space our prompt.
+At this point, we are ready to process a user query to our RAG.  We've already defined our text query in a *prompt* variable.  Our first action is to generate a vector that represents the embedded space of our prompt.
 
 ```py
 # get the imbedded space for the prompt
